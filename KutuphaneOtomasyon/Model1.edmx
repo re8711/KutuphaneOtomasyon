@@ -1,0 +1,290 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="kutuphane1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Kitaplar">
+          <Key>
+            <PropertyRef Name="ISBN_No" />
+          </Key>
+          <Property Name="ISBN_No" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Kitap_Adi" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Yazarlar" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Yayin_Evi" Type="nvarchar" MaxLength="100" />
+          <Property Name="Sayfa_Sayisi" Type="int" />
+          <Property Name="Kitap_Turu" Type="nvarchar" MaxLength="50" />
+          <Property Name="Stok" Type="int" />
+          <Property Name="Temin_Turu" Type="nvarchar" MaxLength="50" />
+          <Property Name="Temin_Tarihi" Type="date" />
+          <Property Name="Eklenme_Tarihi" Type="datetime" />
+          <Property Name="Bagislayan" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="KutuphaneGiris">
+          <Key>
+            <PropertyRef Name="Kullanici_Adi" />
+          </Key>
+          <Property Name="E_Posta" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Kullanici_Adi" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Sifre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Ad" Type="nvarchar" MaxLength="50" />
+          <Property Name="Soyad" Type="nvarchar" MaxLength="50" />
+          <Property Name="Kayit_Tarihi" Type="date" />
+        </EntityType>
+        <EntityType Name="OduncIslemleri">
+          <Key>
+            <PropertyRef Name="Islem_Id" />
+          </Key>
+          <Property Name="Islem_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TC_Kimlik_No" Type="varchar" MaxLength="11" Nullable="false" />
+          <Property Name="ISBN_No" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Verilme_Tarihi" Type="date" Nullable="false" />
+          <Property Name="Teslim_Tarihi" Type="date" Nullable="false" />
+          <Property Name="Gercek_Teslim_Tarihi" Type="date" />
+          <Property Name="Durum" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Ceza_Ucreti" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="Uyeler">
+          <Key>
+            <PropertyRef Name="TC_Kimlik_No" />
+          </Key>
+          <Property Name="TC_Kimlik_No" Type="varchar" MaxLength="11" Nullable="false" />
+          <Property Name="Ad" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Soyad" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Dogum_Tarihi" Type="date" />
+          <Property Name="Cinsiyet" Type="nvarchar" MaxLength="10" />
+          <Property Name="Cep_Telefonu" Type="varchar" MaxLength="15" />
+          <Property Name="Eposta_Adresi" Type="varchar" MaxLength="100" />
+          <Property Name="Adres" Type="nvarchar" MaxLength="255" />
+          <Property Name="Eklenme_Tarihi" Type="date" />
+          <Property Name="Blokeli_Durum" Type="bit" />
+        </EntityType>
+        <Association Name="FK__OduncIsle__ISBN___09A971A2">
+          <End Role="Kitaplar" Type="Self.Kitaplar" Multiplicity="1" />
+          <End Role="OduncIslemleri" Type="Self.OduncIslemleri" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kitaplar">
+              <PropertyRef Name="ISBN_No" />
+            </Principal>
+            <Dependent Role="OduncIslemleri">
+              <PropertyRef Name="ISBN_No" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OduncIsle__TC_Ki__08B54D69">
+          <End Role="Uyeler" Type="Self.Uyeler" Multiplicity="1" />
+          <End Role="OduncIslemleri" Type="Self.OduncIslemleri" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Uyeler">
+              <PropertyRef Name="TC_Kimlik_No" />
+            </Principal>
+            <Dependent Role="OduncIslemleri">
+              <PropertyRef Name="TC_Kimlik_No" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="kutuphane1ModelStoreContainer">
+          <EntitySet Name="Kitaplar" EntityType="Self.Kitaplar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KutuphaneGiris" EntityType="Self.KutuphaneGiris" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OduncIslemleri" EntityType="Self.OduncIslemleri" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Uyeler" EntityType="Self.Uyeler" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__OduncIsle__ISBN___09A971A2" Association="Self.FK__OduncIsle__ISBN___09A971A2">
+            <End Role="Kitaplar" EntitySet="Kitaplar" />
+            <End Role="OduncIslemleri" EntitySet="OduncIslemleri" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OduncIsle__TC_Ki__08B54D69" Association="Self.FK__OduncIsle__TC_Ki__08B54D69">
+            <End Role="Uyeler" EntitySet="Uyeler" />
+            <End Role="OduncIslemleri" EntitySet="OduncIslemleri" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="kutuphane1Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="kutuphane1Entities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="Kitaplar" EntityType="kutuphane1Model.Kitaplar" />
+          <EntitySet Name="Uyeler" EntityType="kutuphane1Model.Uyeler" />
+          <EntitySet Name="KutuphaneGiris" EntityType="kutuphane1Model.KutuphaneGiris" />
+          <EntitySet Name="OduncIslemleri" EntityType="kutuphane1Model.OduncIslemleri" />
+          <AssociationSet Name="FK__OduncIsle__ISBN___09A971A2" Association="kutuphane1Model.FK__OduncIsle__ISBN___09A971A2">
+            <End Role="Kitaplar" EntitySet="Kitaplar" />
+            <End Role="OduncIslemleri" EntitySet="OduncIslemleri" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OduncIsle__TC_Ki__08B54D69" Association="kutuphane1Model.FK__OduncIsle__TC_Ki__08B54D69">
+            <End Role="Uyeler" EntitySet="Uyeler" />
+            <End Role="OduncIslemleri" EntitySet="OduncIslemleri" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Kitaplar">
+          <Key>
+            <PropertyRef Name="ISBN_No" />
+          </Key>
+          <Property Name="ISBN_No" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Kitap_Adi" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Yazarlar" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Yayin_Evi" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Sayfa_Sayisi" Type="Int32" />
+          <Property Name="Kitap_Turu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Stok" Type="Int32" />
+          <Property Name="Temin_Turu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Temin_Tarihi" Type="DateTime" Precision="0" />
+          <Property Name="Eklenme_Tarihi" Type="DateTime" Precision="3" />
+          <Property Name="Bagislayan" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="OduncIslemleri" Relationship="kutuphane1Model.FK__OduncIsle__ISBN___09A971A2" FromRole="Kitaplar" ToRole="OduncIslemleri" />
+        </EntityType>
+        <EntityType Name="Uyeler">
+          <Key>
+            <PropertyRef Name="TC_Kimlik_No" />
+          </Key>
+          <Property Name="TC_Kimlik_No" Type="String" Nullable="false" MaxLength="11" FixedLength="false" Unicode="false" />
+          <Property Name="Ad" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Soyad" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Dogum_Tarihi" Type="DateTime" Precision="0" />
+          <Property Name="Cinsiyet" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Cep_Telefonu" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Eposta_Adresi" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Adres" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Eklenme_Tarihi" Type="DateTime" Precision="0" />
+          <Property Name="Blokeli_Durum" Type="Boolean" />
+          <NavigationProperty Name="OduncIslemleri" Relationship="kutuphane1Model.FK__OduncIsle__TC_Ki__08B54D69" FromRole="Uyeler" ToRole="OduncIslemleri" />
+        </EntityType>
+        <EntityType Name="KutuphaneGiris">
+          <Key>
+            <PropertyRef Name="Kullanici_Adi" />
+          </Key>
+          <Property Name="E_Posta" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Kullanici_Adi" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Sifre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Ad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Soyad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Kayit_Tarihi" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="OduncIslemleri">
+          <Key>
+            <PropertyRef Name="Islem_Id" />
+          </Key>
+          <Property Name="Islem_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TC_Kimlik_No" Type="String" Nullable="false" MaxLength="11" FixedLength="false" Unicode="false" />
+          <Property Name="ISBN_No" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Verilme_Tarihi" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Teslim_Tarihi" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Gercek_Teslim_Tarihi" Type="DateTime" Precision="0" />
+          <Property Name="Durum" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Ceza_Ucreti" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Kitaplar" Relationship="kutuphane1Model.FK__OduncIsle__ISBN___09A971A2" FromRole="OduncIslemleri" ToRole="Kitaplar" />
+          <NavigationProperty Name="Uyeler" Relationship="kutuphane1Model.FK__OduncIsle__TC_Ki__08B54D69" FromRole="OduncIslemleri" ToRole="Uyeler" />
+        </EntityType>
+        <Association Name="FK__OduncIsle__ISBN___09A971A2">
+          <End Type="kutuphane1Model.Kitaplar" Role="Kitaplar" Multiplicity="1" />
+          <End Type="kutuphane1Model.OduncIslemleri" Role="OduncIslemleri" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kitaplar">
+              <PropertyRef Name="ISBN_No" />
+            </Principal>
+            <Dependent Role="OduncIslemleri">
+              <PropertyRef Name="ISBN_No" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OduncIsle__TC_Ki__08B54D69">
+          <End Type="kutuphane1Model.Uyeler" Role="Uyeler" Multiplicity="1" />
+          <End Type="kutuphane1Model.OduncIslemleri" Role="OduncIslemleri" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Uyeler">
+              <PropertyRef Name="TC_Kimlik_No" />
+            </Principal>
+            <Dependent Role="OduncIslemleri">
+              <PropertyRef Name="TC_Kimlik_No" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="kutuphane1ModelStoreContainer" CdmEntityContainer="kutuphane1Entities" >
+          <EntitySetMapping Name="Kitaplar">
+            <EntityTypeMapping TypeName="kutuphane1Model.Kitaplar">
+              <MappingFragment StoreEntitySet="Kitaplar">
+                <ScalarProperty Name="Bagislayan" ColumnName="Bagislayan" />
+                <ScalarProperty Name="Eklenme_Tarihi" ColumnName="Eklenme_Tarihi" />
+                <ScalarProperty Name="Temin_Tarihi" ColumnName="Temin_Tarihi" />
+                <ScalarProperty Name="Temin_Turu" ColumnName="Temin_Turu" />
+                <ScalarProperty Name="Stok" ColumnName="Stok" />
+                <ScalarProperty Name="Kitap_Turu" ColumnName="Kitap_Turu" />
+                <ScalarProperty Name="Sayfa_Sayisi" ColumnName="Sayfa_Sayisi" />
+                <ScalarProperty Name="Yayin_Evi" ColumnName="Yayin_Evi" />
+                <ScalarProperty Name="Yazarlar" ColumnName="Yazarlar" />
+                <ScalarProperty Name="Kitap_Adi" ColumnName="Kitap_Adi" />
+                <ScalarProperty Name="ISBN_No" ColumnName="ISBN_No" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Uyeler">
+            <EntityTypeMapping TypeName="kutuphane1Model.Uyeler">
+              <MappingFragment StoreEntitySet="Uyeler">
+                <ScalarProperty Name="Blokeli_Durum" ColumnName="Blokeli_Durum" />
+                <ScalarProperty Name="Eklenme_Tarihi" ColumnName="Eklenme_Tarihi" />
+                <ScalarProperty Name="Adres" ColumnName="Adres" />
+                <ScalarProperty Name="Eposta_Adresi" ColumnName="Eposta_Adresi" />
+                <ScalarProperty Name="Cep_Telefonu" ColumnName="Cep_Telefonu" />
+                <ScalarProperty Name="Cinsiyet" ColumnName="Cinsiyet" />
+                <ScalarProperty Name="Dogum_Tarihi" ColumnName="Dogum_Tarihi" />
+                <ScalarProperty Name="Soyad" ColumnName="Soyad" />
+                <ScalarProperty Name="Ad" ColumnName="Ad" />
+                <ScalarProperty Name="TC_Kimlik_No" ColumnName="TC_Kimlik_No" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KutuphaneGiris">
+            <EntityTypeMapping TypeName="kutuphane1Model.KutuphaneGiris">
+              <MappingFragment StoreEntitySet="KutuphaneGiris">
+                <ScalarProperty Name="Kayit_Tarihi" ColumnName="Kayit_Tarihi" />
+                <ScalarProperty Name="Soyad" ColumnName="Soyad" />
+                <ScalarProperty Name="Ad" ColumnName="Ad" />
+                <ScalarProperty Name="Sifre" ColumnName="Sifre" />
+                <ScalarProperty Name="Kullanici_Adi" ColumnName="Kullanici_Adi" />
+                <ScalarProperty Name="E_Posta" ColumnName="E_Posta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OduncIslemleri">
+            <EntityTypeMapping TypeName="kutuphane1Model.OduncIslemleri">
+              <MappingFragment StoreEntitySet="OduncIslemleri">
+                <ScalarProperty Name="Ceza_Ucreti" ColumnName="Ceza_Ucreti" />
+                <ScalarProperty Name="Durum" ColumnName="Durum" />
+                <ScalarProperty Name="Gercek_Teslim_Tarihi" ColumnName="Gercek_Teslim_Tarihi" />
+                <ScalarProperty Name="Teslim_Tarihi" ColumnName="Teslim_Tarihi" />
+                <ScalarProperty Name="Verilme_Tarihi" ColumnName="Verilme_Tarihi" />
+                <ScalarProperty Name="ISBN_No" ColumnName="ISBN_No" />
+                <ScalarProperty Name="TC_Kimlik_No" ColumnName="TC_Kimlik_No" />
+                <ScalarProperty Name="Islem_Id" ColumnName="Islem_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
